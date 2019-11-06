@@ -50,6 +50,8 @@ function newConnection(socket){
 	console.log('connection:',	socket.id);
 	socket.on('mouse', mouseMsg);
 	socket.on('audio', audioMsg);
+	socket.on('end', showGuess);
+	socket.on('answer', showAnswer);
 	
 	function mouseMsg(data) {
 		socket.broadcast.emit('mouse', data)
@@ -59,5 +61,15 @@ function newConnection(socket){
 	function audioMsg(oggUrl) {
 		socket.broadcast.emit('raudio', oggUrl)
 		console.log(oggUrl)
+	}
+
+	function showGuess(guess) {
+		socket.broadcast.emit('guess', guess)
+		console.log(guess)
+	}
+
+	function showAnswer(answer) {
+		socket.broadcast.emit('finish', answer)
+		console.log(answer)
 	}
 }
