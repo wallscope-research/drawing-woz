@@ -49,9 +49,15 @@ io.sockets.on('connection', newConnection)
 function newConnection(socket){
 	console.log('connection:',	socket.id);
 	socket.on('mouse', mouseMsg);
+	socket.on('audio', audioMsg);
 	
 	function mouseMsg(data) {
 		socket.broadcast.emit('mouse', data)
 		console.log(data)
+	}
+
+	function audioMsg(oggUrl) {
+		socket.broadcast.emit('raudio', oggUrl)
+		console.log(oggUrl)
 	}
 }

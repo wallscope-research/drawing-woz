@@ -23,7 +23,7 @@
   <button id="tts">Submit</button>
 
   <audio id="player" preload="auto"> 
-    <source src="cereproc/test.ogg" /> 
+    <source src="cereproc/test.ogg"/> 
   </audio>
 
   <form>
@@ -38,6 +38,8 @@
   <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
 
   <script>
+    socket = io.connect('http://localhost:3000');
+
     $('#tts').click(function(){
       $.get({
         url: "/send-to-tts", 
@@ -45,13 +47,22 @@
           text : $('#ttstext').val(), 
           vid : $('#vid').val()
         }
-        }).done((res) => {
-          console.log(res)
-          $('#player').attr("src", res);
-          $('#player').get(0).play();
-        })
-        })
-      </script>
+      }).done((res) => {
+        console.log(res)
+        // $('#player').attr("src", res);
+        // $('#player').get(0).play();
+        socket.emit('audio', res)
+       })
+    })
+
+    socket.on('raudio', playOgg)
+
+    function playOgg(oggUrl) {
+      $('#player').attr("src", oggUrl);
+      $('#player').get(0).play();
+      console.log(oggUrl)
+    }
+  </script>
 </body>
 
 </html>

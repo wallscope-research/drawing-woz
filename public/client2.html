@@ -21,7 +21,9 @@
 <body>
     <form>
         vID:<br>
-        <input type="text" id="vid">
+        <input type="text" id="vid"><br>
+        Answer:<br>
+        <input type="text" id="answer" readonly>
       </form>
 
       <audio id="player" preload="auto"> 
@@ -38,6 +40,8 @@
       <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
 
       <script>
+        socket = io.connect('http://localhost:3000');
+
         $('#ok').click(function(){
           $.get({
             url: "/send-to-tts", 
@@ -47,13 +51,12 @@
             }
         }).done((res) => {
           console.log(res)
-          $('#player').attr("src", res);
-          $('#player').get(0).play();
+          // $('#player').attr("src", res);
+          // $('#player').get(0).play();
+          socket.emit('audio', res)
         })
         })
-      </script>
-      
-      <script>
+        
         $('#repeat').click(function(){
           $.get({
             url: "/send-to-tts", 
@@ -63,13 +66,12 @@
             }
         }).done((res) => {
           console.log(res)
-          $('#player').attr("src", res);
-          $('#player').get(0).play();
+          // $('#player').attr("src", res);
+          // $('#player').get(0).play();
+          socket.emit('audio', res)
         })
         })
-      </script>
 
-      <script>
         $('#clarify').click(function(){
           $.get({
             url: "/send-to-tts", 
@@ -79,10 +81,18 @@
             }
         }).done((res) => {
           console.log(res)
-          $('#player').attr("src", res);
+          // $('#player').attr("src", res);
+          // $('#player').get(0).play();
+          socket.emit('audio', res)
+        })
+        })
+
+        socket.on('raudio', playOgg)
+
+        function playOgg(oggUrl) {
+          $('#player').attr("src", oggUrl);
           $('#player').get(0).play();
-        })
-        })
+        }
       </script>
 </body>
 
