@@ -24,6 +24,10 @@
         <input type="text" id="vid">
       </form>
 
+      <audio id="player" preload="auto"> 
+        <source src="cereproc/test.ogg" /> 
+      </audio>
+
       <button id="ok">Ok, what's next?</button>
       <button id="repeat">Could you repeat that please?</button>
       <button id="clarify">Can you clarify?</button><br>
@@ -43,8 +47,8 @@
               text : "Ok", //"Ok, what is next", 
               vid : $('#vid').val()
             }
-        }).response(res, function(){
-
+        }).done((res) => {
+          console.log("HERE" + res)
         })
         })
       </script>
@@ -57,8 +61,8 @@
               text : "Hi", //"Could you repeat that please", 
               vid : $('#vid').val()
             }
-        }).response(res, function(){
-
+        }).done(res, function(){
+          console.log(res)
         })
         })
       </script>
@@ -71,8 +75,8 @@
               text : "Yo", //"Can you clarify", 
               vid : $('#vid').val()
             }
-        }).response(res, function(){
-
+        }).done(res, function(){
+          console.log(res)
         })
         })
       </script>

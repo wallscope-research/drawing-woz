@@ -22,6 +22,10 @@
   <textarea id=ttstext rows="6" cols="50">Test</textarea><br>
   <button id="tts">Submit</button>
 
+  <audio id="player" preload="auto"> 
+    <source src="cereproc/test.ogg" /> 
+  </audio>
+
   <form>
     vID:<br>
     <input type="text" id="vid"><br>
@@ -41,8 +45,8 @@
           text : $('#ttstext').val(), 
           vid : $('#vid').val()
         }
-    }).response(res, function(){
-
+    }).done(res, function(){
+      console.log(res)
     })
     })
   </script>

@@ -30,12 +30,11 @@ app.get('/send-to-tts', async (req, res) => {
 
 	try {
 		// Send the request
-		const res = await axios.post(cereurl, str)
-		url = String(res.data).match(/(?<=<fileUrl>).*?(?=<)/gi)
+		const resp = await axios.post(cereurl, str)
+		url = String(resp.data).match(/(?<=<fileUrl>).*?(?=<)/gi)
 	} catch(err){
 		console.log(err)
 	}
-	
 	console.log(url)
 })
 
