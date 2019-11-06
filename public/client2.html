@@ -37,8 +37,6 @@
 
       <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
 
-      <div id="audioResponse"></div>
-
       <script>
         $('#ok').click(function(){
           $.get({
@@ -48,7 +46,9 @@
               vid : $('#vid').val()
             }
         }).done((res) => {
-          console.log("HERE" + res)
+          console.log(res)
+          $('#player').attr("src", res);
+          $('#player').get(0).play();
         })
         })
       </script>
@@ -61,8 +61,10 @@
               text : "Hi", //"Could you repeat that please", 
               vid : $('#vid').val()
             }
-        }).done(res, function(){
+        }).done((res) => {
           console.log(res)
+          $('#player').attr("src", res);
+          $('#player').get(0).play();
         })
         })
       </script>
@@ -75,8 +77,10 @@
               text : "Yo", //"Can you clarify", 
               vid : $('#vid').val()
             }
-        }).done(res, function(){
+        }).done((res) => {
           console.log(res)
+          $('#player').attr("src", res);
+          $('#player').get(0).play();
         })
         })
       </script>

@@ -45,11 +45,13 @@
           text : $('#ttstext').val(), 
           vid : $('#vid').val()
         }
-    }).done(res, function(){
-      console.log(res)
-    })
-    })
-  </script>
+        }).done((res) => {
+          console.log(res)
+          $('#player').attr("src", res);
+          $('#player').get(0).play();
+        })
+        })
+      </script>
 </body>
 
 </html>
