@@ -1,16 +1,15 @@
 let clr
 let socket
 function setup() {
-	let h = 400
-	let w = 400
+	let h = 600
+	let w = 600
 	socket = io.connect('http://localhost:3000')
   socket.on('mouse', newDrawing);
   createCanvas(h, w);
-  background(51);
+  background(0);
   clr = random(360)
   noStroke()
 }
-
 
 function displayDot(x, y, color, color2 = 100){
 	colorMode(HSB)
@@ -25,7 +24,7 @@ function mousePressed(){
 	mouseDragged()
 }
 function mouseDragged() {
-	clr += 1
+	// clr += 1
 	clr = upgradeColor(clr)
 	let data = {
 		x: mouseX,
@@ -39,7 +38,7 @@ function mouseDragged() {
 }
 function newDrawing(data){
 	data.color = upgradeColor(data.color)
-	displayDot(data.x, data.y, data.color, 30)
+	displayDot(data.x, data.y, data.color, 100)
 }
 function upgradeColor(c){
 	if (c < 0){

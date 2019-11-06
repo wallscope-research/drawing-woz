@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shared Canvas</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+  </style>
+  <script src="./p5.min.js"></script>
+  <script src="./addons/p5.dom.min.js"></script>
+  <script src="./addons/socket.io-client.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="./scripts/sketch.js"></script>
+</head>
+
+<body>
+  <textarea id=ttstext rows="6" cols="50">Test</textarea><br>
+  <button id="tts">Submit</button>
+
+  <form>
+    vID:<br>
+    <input type="text" id="vid"><br>
+    Picture:<br>
+    <input type="text" id="pic"><br>
+    Other Player's Guess:<br>
+    <input type="text" id="guess" readonly>
+  </form>
+
+  <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
+
+  <script>
+    $('#tts').click(function(){
+      $.get({
+        url: "/send-to-tts", 
+        data: {
+          text : $('#ttstext').val(), 
+          vid : $('#vid').val()
+        }
+    }).response(res, function(){
+
+    })
+    })
+  </script>
+</body>
+
+</html>
