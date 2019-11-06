@@ -36,6 +36,7 @@ app.get('/send-to-tts', async (req, res) => {
 		console.log(err)
 	}
 	console.log(url)
+	res.send(url)
 })
 
 console.log("Socket server is running. localhost:" + host)
