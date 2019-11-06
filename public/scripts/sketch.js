@@ -7,14 +7,14 @@ function setup() {
   socket.on('mouse', newDrawing);
   createCanvas(h, w);
   background(0);
-  clr = 180 //random(360)
+  clr = 180
   noStroke()
 }
 
 function displayDot(x, y, color, color2 = 100){
 	colorMode(HSB)
 	fill(color, 100, color2)
-	ellipse(x, y, 10)
+	ellipse(x, y, 13)
 	colorMode(RGB)
 }
 
@@ -24,7 +24,6 @@ function mousePressed(){
 	mouseDragged()
 }
 function mouseDragged() {
-	// clr += 1
 	clr = upgradeColor(clr)
 	let data = {
 		x: mouseX,
@@ -38,7 +37,7 @@ function mouseDragged() {
 }
 function newDrawing(data){
 	data.color = upgradeColor(data.color)
-	displayDot(data.x, data.y, data.color, 150)
+	displayDot(data.x, data.y, data.color, 50)
 }
 function upgradeColor(c){
 	if (c < 0){
