@@ -34,7 +34,7 @@
       <button id="repeat">Could you repeat that please?</button>
       <button id="clarify">Can you clarify?</button><br>
 
-      <textarea rows="2" cols="20">Test</textarea><br>
+      <textarea id="fin" rows="2" cols="20">Test</textarea><br>
       <button id="guess">Guess</button><br>
 
       <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
@@ -50,9 +50,6 @@
               vid : $('#vid').val()
             }
         }).done((res) => {
-          console.log(res)
-          // $('#player').attr("src", res);
-          // $('#player').get(0).play();
           socket.emit('audio', res)
         })
         })
@@ -65,9 +62,6 @@
               vid : $('#vid').val()
             }
         }).done((res) => {
-          console.log(res)
-          // $('#player').attr("src", res);
-          // $('#player').get(0).play();
           socket.emit('audio', res)
         })
         })
@@ -80,18 +74,24 @@
               vid : $('#vid').val()
             }
         }).done((res) => {
-          console.log(res)
-          // $('#player').attr("src", res);
-          // $('#player').get(0).play();
           socket.emit('audio', res)
         })
         })
 
+        $('#guess').click(function() {
+          socket.emit('end', $('#fin').val())
+        })
+
         socket.on('raudio', playOgg)
+        socket.on('finish', showAnswer)
 
         function playOgg(oggUrl) {
           $('#player').attr("src", oggUrl);
           $('#player').get(0).play();
+        }
+
+        function showAnswer(answer) {
+          $('#answer').val(answer);
         }
       </script>
 </body>

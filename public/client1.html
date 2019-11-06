@@ -48,20 +48,31 @@
           vid : $('#vid').val()
         }
       }).done((res) => {
-        console.log(res)
-        // $('#player').attr("src", res);
-        // $('#player').get(0).play();
         socket.emit('audio', res)
        })
     })
 
     socket.on('raudio', playOgg)
+    socket.on('guess', endGame)
 
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
       $('#player').get(0).play();
       console.log(oggUrl)
     }
+
+    function endGame(guess) {
+      $('#guess').val(guess);
+      socket.emit('answer', $('#pic').val())
+    }
+
+    $('#ttstext').on('keyup', function() {
+      var words = this.value.match(/\S+/g).length;
+      if (words > 40) {
+        var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
+        $(this).val(trimmed);
+      }
+    })
   </script>
 </body>
 
