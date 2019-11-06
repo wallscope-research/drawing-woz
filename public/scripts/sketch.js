@@ -7,7 +7,7 @@ function setup() {
   socket.on('mouse', newDrawing);
   createCanvas(h, w);
   background(0);
-  clr = random(360)
+  clr = 180 //random(360)
   noStroke()
 }
 
@@ -38,7 +38,7 @@ function mouseDragged() {
 }
 function newDrawing(data){
 	data.color = upgradeColor(data.color)
-	displayDot(data.x, data.y, data.color, 100)
+	displayDot(data.x, data.y, data.color, 150)
 }
 function upgradeColor(c){
 	if (c < 0){
