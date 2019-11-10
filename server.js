@@ -7,13 +7,13 @@ const axios = require('axios');
 
 app.use(express.static('public'));
 
-app.get('/', function(req, res) {
-	if(req.query.id==='1') {
+app.get('/', function (req, res) {
+	if (req.query.id === '1') {
 		res.sendFile(path.join(__dirname + '/public/client1.html'));
 	} else {
 		res.sendFile(path.join(__dirname + '/public/client2.html'));
 	}
-	
+
 })
 
 app.get('/send-to-tts', async (req, res) => {
@@ -21,10 +21,10 @@ app.get('/send-to-tts', async (req, res) => {
 	var config = require("./config.json")
 	var cereurl = "https://cerevoice.com/rest/rest_1_1.php";
 	var str = "<?xml version='1.0'?><speakSimple>" +
-	"<accountID>" + config.accountID + "</accountID>" +
-	"<password>" + config.password + "</password>" +
-	"<voice>" + req.query.vid + "</voice>" +
-	"<text>" + req.query.text + "</text></speakSimple>";
+		"<accountID>" + config.accountID + "</accountID>" +
+		"<password>" + config.password + "</password>" +
+		"<voice>" + req.query.vid + "</voice>" +
+		"<text>" + req.query.text + "</text></speakSimple>";
 
 	let url
 
@@ -32,7 +32,7 @@ app.get('/send-to-tts', async (req, res) => {
 		// Send the request
 		const resp = await axios.post(cereurl, str)
 		url = String(resp.data).match(/(?<=<fileUrl>).*?(?=<)/gi)
-	} catch(err){
+	} catch (err) {
 		console.log(err)
 	}
 	console.log(url)
@@ -46,13 +46,13 @@ let io = socket(server);
 
 io.sockets.on('connection', newConnection)
 
-function newConnection(socket){
-	console.log('connection:',	socket.id);
+function newConnection(socket) {
+	console.log('connection:', socket.id);
 	socket.on('mouse', mouseMsg);
 	socket.on('audio', audioMsg);
 	socket.on('end', showGuess);
 	socket.on('answer', showAnswer);
-	
+
 	function mouseMsg(data) {
 		socket.broadcast.emit('mouse', data)
 		console.log(data)

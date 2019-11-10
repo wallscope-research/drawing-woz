@@ -19,46 +19,46 @@
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
+  <form>
+    <div class="form-group">
       vID:<br>
       <input type="text" id="vid"><br>
       Picture:<br>
       <input type="text" id="pic"><br>
       Other Player's Guess:<br>
       <input type="text" id="guess" readonly>
-        </div>
-    </form>
-
-    <audio id="player" preload="auto"> 
-        <source src="cereproc/test.ogg"/> 
-    </audio>
-
-    <div>
-        <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
     </div>
+  </form>
+
+  <audio id="player" preload="auto">
+    <source src="cereproc/test.ogg" />
+  </audio>
+
+  <div>
+    <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
+  </div>
 
   <div class="guess-group">
     <div class="all-buttons"></div>
     <div id="my-guess">
-    <textarea id=ttstext rows="6" cols="50">Test</textarea><br>
-    <button id="tts">Submit</button>
+      <textarea id=ttstext rows="6" cols="50">Test</textarea><br>
+      <button id="tts">Submit</button>
     </div>
   </div>
 
   <script>
     socket = io.connect('http://localhost:3000');
 
-    $('#tts').click(function(){
+    $('#tts').click(function () {
       $.get({
-        url: "/send-to-tts", 
+        url: "/send-to-tts",
         data: {
-          text : $('#ttstext').val(), 
-          vid : $('#vid').val()
+          text: $('#ttstext').val(),
+          vid: $('#vid').val()
         }
       }).done((res) => {
         socket.emit('audio', res)
-       })
+      })
     })
 
     socket.on('raudio', playOgg)
@@ -75,7 +75,7 @@
       socket.emit('answer', $('#pic').val())
     }
 
-    $('#ttstext').on('keyup', function() {
+    $('#ttstext').on('keyup', function () {
       var words = this.value.match(/\S+/g).length;
       if (words > 40) {
         var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
@@ -84,12 +84,13 @@
     })
   </script>
 
-<style lang="scss">
+  <style lang="scss">
     canvas {
       grid-column: 1/2;
       grid-row: 2/3;
       width: 100%;
     }
+
     .guess-group {
       grid-column: 2/3;
       display: flex;
@@ -97,59 +98,73 @@
       justify-content: center;
       align-items: center;
     }
+
     body {
       display: grid;
       grid-template-columns: 1fr 1fr;
       padding: 30px 40px;
       grid-gap: 20px;
     }
+
     * {
       background: lightgrey;
     }
+
     .form-group {
-       margin-bottom: 10px;
+      margin-bottom: 10px;
     }
-    input, textarea{
+
+    input,
+    textarea {
       background: white;
       padding: 5px 8px;
       width: 240px;
     }
+
     textarea {
       height: 100px;
     }
-    .all-buttons  {
+
+    .all-buttons {
       display: flex;
       flex-direction: column;
     }
+
     button {
-      cursor:pointer;
+      cursor: pointer;
       border: none;
-      box-shadow: 1px 3px 8px grey; 
+      box-shadow: 1px 3px 8px grey;
       padding: 10px 5px;
       background: white;
       font-size: 14px;
     }
-    button:hover{
+
+    button:hover {
       box-shadow: 1px 3px 8px #5a5555;
     }
-    button#guess{
+
+    button#guess {
       width: 260px;
       background: #7bcc7b;
     }
-    .all-buttons button{
+
+    .all-buttons button {
       padding: 10px 5px;
-      margin-bottom: 5px; 
-         
-      width: 260px;     
+      margin-bottom: 5px;
+
+      width: 260px;
     }
-    .all-buttons button#ok{
+
+    .all-buttons button#ok {
       background: #7babea;
       margin-top: 15px;
     }
+
     .all-buttons button#clarify,
-    .all-buttons button#repeat{
+    .all-buttons button#repeat {
       background: #ffdc76;
     }
+
     button#switch {
       padding: 20px 10px;
       margin-left: auto;
@@ -157,7 +172,8 @@
       width: 100px;
       font-size: 18px;
     }
-    #my-guess{
+
+    #my-guess {
       margin-top: 50px;
     }
   </style>
