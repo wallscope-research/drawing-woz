@@ -20,24 +20,37 @@
 
 <body>
     <form>
+      <div class="form-group">
         vID:<br>
         <input type="text" id="vid"><br>
-        Answer:<br>
-        <input type="text" id="answer" readonly>
-      </form>
+      </div>
+    </form>
 
       <audio id="player" preload="auto"> 
         <source src="cereproc/test.ogg" /> 
       </audio>
-
-      <button id="ok">Ok, what's next?</button>
-      <button id="repeat">Could you repeat that please?</button>
-      <button id="clarify">Can you clarify?</button><br>
-
-      <textarea id="fin" rows="2" cols="20">Test</textarea><br>
-      <button id="guess">Guess</button><br>
-
-      <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
+      <div>
+        <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
+      </div>
+      <div class="guess-group">
+        <div class="all-buttons">
+          
+          <button id="repeat">Could you please repeat that?</button>
+          <button id="clarify">Can you clarify?</button>
+          <button id="ok">Ok, what's next?</button>
+        </div>
+        <div id="my-guess">
+          <textarea id="fin" rows="2" cols="20" placeholder="Enter your guess"></textarea><br>
+          <button id="guess">Guess</button><br>
+          <form>
+              <div class="guess-group"></div>
+              <br>Answer:<br>
+              <input type="text" id="answer" readonly>
+            </div>
+          </form>
+        </div>  
+      </div>
+      
 
       <script>
         socket = io.connect('http://localhost:3000');
@@ -58,7 +71,7 @@
           $.get({
             url: "/send-to-tts", 
             data: {
-              text : "Could you repeat that please", 
+              text : "Could you please repeat that", 
               vid : $('#vid').val()
             }
         }).done((res) => {
@@ -94,6 +107,85 @@
           $('#answer').val(answer);
         }
       </script>
+
+      <style lang="scss">
+        canvas {
+          grid-column: 1/2;
+          grid-row: 2/3;
+          width: 100%;
+        }
+        .guess-group {
+          grid-column: 2/3;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
+        body {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          padding: 30px 40px;
+          grid-gap: 20px;
+        }
+        * {
+          background: lightgrey;
+        }
+        .form-group {
+           margin-bottom: 10px;
+        }
+        input, textarea{
+          background: white;
+          padding: 5px 8px;
+          width: 240px;
+        }
+        textarea {
+          height: 100px;
+        }
+        .all-buttons  {
+          display: flex;
+          flex-direction: column;
+        }
+        button {
+          cursor:pointer;
+          border: none;
+          box-shadow: 1px 3px 8px grey; 
+          padding: 10px 5px;
+          background: white;
+          font-size: 14px;
+        }
+        button:hover{
+          box-shadow: 1px 3px 8px #5a5555;
+        }
+        button#guess{
+          width: 260px;
+          background: #7bcc7b;
+        }
+        .all-buttons button{
+          padding: 10px 5px;
+          margin-bottom: 5px; 
+             
+          width: 260px;     
+        }
+        .all-buttons button#ok{
+          background: #7babea;
+          margin-top: 15px;
+        }
+        .all-buttons button#clarify,
+        .all-buttons button#repeat{
+          background: #ffdc76;
+        }
+        button#switch {
+          padding: 20px 10px;
+          margin-left: auto;
+          float: right;
+          width: 100px;
+          font-size: 18px;
+        }
+        #my-guess{
+          margin-top: 50px;
+        }
+      </style>
+
 </body>
 
 </html>
