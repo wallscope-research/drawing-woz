@@ -7,7 +7,7 @@ const axios = require('axios');
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const csvWriter = createCsvWriter({
-	path: 'gameData.csv',
+	path: 'data/gameData' + new Date().getTime() + '.csv',
 	header: [
 		{id: 'time', title: 'Timestamp'},
 		{id: 'pic', title: 'Drawing'},
