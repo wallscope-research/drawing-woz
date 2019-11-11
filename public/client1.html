@@ -58,6 +58,9 @@
         }
       }).done((res) => {
         socket.emit('audio', res)
+        // Create record to store data
+        var record = [{time: + new Date(), pic: $('#pic').val(), voice: $('#vid').val(), text: $('#ttstext').val()}]
+        socket.emit('store', record)
       })
     })
 

@@ -5,6 +5,17 @@ let host = 3000
 let server = app.listen(host)
 const axios = require('axios');
 
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const csvWriter = createCsvWriter({
+	path: 'gameData.csv',
+	header: [
+		{id: 'time', title: 'Timestamp'},
+		{id: 'pic', title: 'Drawing'},
+		{id: 'voice', title: 'Voice'},
+		{id: 'text', title: 'Utterance'},
+	]
+});
+
 app.use(express.static('public'));
 
 app.get('/', function (req, res) {
@@ -52,6 +63,7 @@ function newConnection(socket) {
 	socket.on('audio', audioMsg);
 	socket.on('end', showGuess);
 	socket.on('answer', showAnswer);
+	socket.on('store', saveState);
 
 	function mouseMsg(data) {
 		socket.broadcast.emit('mouse', data)
@@ -71,5 +83,8 @@ function newConnection(socket) {
 	function showAnswer(answer) {
 		socket.broadcast.emit('finish', answer)
 		console.log(answer)
+	}
+	function saveState(record) {
+		csvWriter.writeRecords(record).then(() => {console.log("Saved");});
 	}
 }
