@@ -43,9 +43,10 @@
       <textarea id="fin" rows="2" cols="20" placeholder="Enter your guess"></textarea><br>
       <button id="guess">Guess</button><br>
       <form>
-        <div class="guess-group"></div>
-        <br>Answer:<br>
-        <input type="text" id="answer" readonly>
+        <div class="end-group">
+          <br>Answer:<br>
+          <input type="text" id="answer" readonly>
+        </div>
     </div>
     </form>
   </div>
@@ -105,6 +106,7 @@
 
     function showAnswer(answer) {
       $('#answer').val(answer);
+      $('.end-group').css('visibility', 'visible');
     }
   </script>
 
@@ -136,6 +138,11 @@
 
     .form-group {
       margin-bottom: 10px;
+    }
+
+    .end-group {
+      margin-bottom: 10px;
+      visibility: hidden;
     }
 
     input,

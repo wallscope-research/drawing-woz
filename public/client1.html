@@ -25,6 +25,8 @@
       <input type="text" id="vid"><br>
       Picture:<br>
       <input type="text" id="pic"><br>
+    </div>
+    <div class="end-group">
       Other Player's Guess:<br>
       <input type="text" id="guess" readonly>
     </div>
@@ -38,10 +40,10 @@
     <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
   </div>
 
-  <div class="guess-group">
+  <div class="tts-group">
     <div class="all-buttons"></div>
-    <div id="my-guess">
-      <textarea id=ttstext rows="6" cols="50">Test</textarea><br>
+    <div id="submit-tts">
+      <textarea id=ttstext rows="6" cols="50" placeholder="Enter your instructions"></textarea><br>
       <button id="tts">Submit</button>
     </div>
   </div>
@@ -76,6 +78,7 @@
     function endGame(guess) {
       $('#guess').val(guess);
       socket.emit('answer', $('#pic').val())
+      $('.end-group').css('visibility', 'visible');
     }
 
     $('#ttstext').on('keyup', function () {
@@ -94,7 +97,7 @@
       width: 100%;
     }
 
-    .guess-group {
+    .tts-group {
       grid-column: 2/3;
       display: flex;
       flex-direction: column;
@@ -115,6 +118,11 @@
 
     .form-group {
       margin-bottom: 10px;
+    }
+
+    .end-group {
+      margin-bottom: 10px;
+      visibility: hidden;
     }
 
     input,
@@ -146,7 +154,7 @@
       box-shadow: 1px 3px 8px #5a5555;
     }
 
-    button#guess {
+    button#tts {
       width: 260px;
       background: #7bcc7b;
     }
@@ -176,7 +184,7 @@
       font-size: 18px;
     }
 
-    #my-guess {
+    #submit-tts {
       margin-top: 50px;
     }
   </style>
