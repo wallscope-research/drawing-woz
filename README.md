@@ -1,4 +1,9 @@
-### Shared Canvas 👩‍🎨🎨👨‍🎨.
+# Collaborative Drawing Game
+### 👩‍🎨🎨👨‍🎨.
+
+This canvas has been built upon to create a more fleshed out drawing game for research.
+
+### Guide:
 
 Creating a local server. Hosting a shared, collaborative drawing canvas.
 Broadcasting messages between clients and the server using node, express, p5.js and socket.io.
