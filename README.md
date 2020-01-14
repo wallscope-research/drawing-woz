@@ -12,16 +12,19 @@ This section describes the game setup and then how to play.
 
 ### Installation and Setup
 
-To run this code:
+To run this code the first time:
 Make sure you have node and npm installed on your machine.
 
 1. Clone this repository.
 2. Open the cloned directory in your terminal.
 3. Replace the accountID and password in `config.json` with your Cereproc credentials.
 4. Run: ```npm install```
-5. Run: ```node server.js```
-6. Open Player 1 running at: http://localhost:3000/?id=1
-7. Open Player 2 running at: http://localhost:3000/?id=2
+5. Run ```mkdir data```
+6. Run: ```node server.js```
+7. Open Player 1 running at: http://localhost:3000/?id=1
+8. Open Player 2 running at: http://localhost:3000/?id=2
+
+To start the game again just follow steps 2, 6, 7 and 8.
 
 ### How to Play
 
