@@ -49,7 +49,7 @@
   </div>
 
   <script>
-    socket = io.connect('http://localhost:3000');
+    socket = io.connect(window.location.origin);
 
     $('#tts').click(function () {
       $.get({
