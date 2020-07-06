@@ -38,95 +38,75 @@
         <option value="Sarah">Voice J</option>
         <option value="Stuart">Voice K</option>
       </select><br>
+      Picture:<br>
+      <input type="text" id="pic"><br>
+    </div>
+    <div class="end-group">
+      Other Player's Guess:<br>
+      <input type="text" id="guess" readonly>
     </div>
   </form>
 
   <audio id="player" preload="auto">
     <source src="cereproc/test.ogg" />
   </audio>
+
   <div>
-    <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
-  </div>
-  <div class="guess-group">
-    <div class="all-buttons">
-
-      <button id="repeat">Could you please repeat that?</button>
-      <button id="clarify">Can you clarify?</button>
-      <button id="ok">Ok, what's next?</button>
-    </div>
-    <div id="my-guess">
-      <textarea id="fin" rows="2" cols="20" placeholder="Enter your guess"></textarea><br>
-      <button id="guess">Guess</button><br>
-      <form>
-        <div class="end-group">
-          <br>Answer:<br>
-          <input type="text" id="answer" readonly>
-        </div>
-    </div>
-    </form>
-  </div>
+    <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
   </div>
 
+  <div class="tts-group">
+    <div class="all-buttons"></div>
+    <div id="submit-tts">
+      <textarea id=ttstext rows="6" cols="50" placeholder="Enter your instructions"></textarea><br>
+      <button id="tts">Submit</button>
+    </div>
+  </div>
 
   <script>
     socket = io.connect(window.location.origin);
 
-    $('#ok').click(function () {
+    $('#tts').click(function () {
       $.get({
         url: "/send-to-tts",
         data: {
-          text: "Ok, what is next",
+          text: $('#ttstext').val(),
           vid: $('#vid').val()
         }
       }).done((res) => {
         socket.emit('audio', res)
+        // Create record to store data
+        var record = [{time: + new Date(), pic: $('#pic').val(), voice: $('#vid').val(), text: $('#ttstext').val()}]
+        socket.emit('store', record)
       })
-    })
-
-    $('#repeat').click(function () {
-      $.get({
-        url: "/send-to-tts",
-        data: {
-          text: "Could you please repeat that",
-          vid: $('#vid').val()
-        }
-      }).done((res) => {
-        socket.emit('audio', res)
-      })
-    })
-
-    $('#clarify').click(function () {
-      $.get({
-        url: "/send-to-tts",
-        data: {
-          text: "Can you clarify",
-          vid: $('#vid').val()
-        }
-      }).done((res) => {
-        socket.emit('audio', res)
-      })
-    })
-
-    $('#guess').click(function () {
-      socket.emit('end', $('#fin').val())
     })
 
     socket.on('raudio', playOgg)
-    socket.on('finish', showAnswer)
+    socket.on('guess', endGame)
 
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
       $('#player').get(0).play();
+      console.log(oggUrl)
     }
 
-    function showAnswer(answer) {
-      $('#answer').val(answer);
+    function endGame(guess) {
+      $('#guess').val(guess);
+      socket.emit('answer', $('#pic').val())
       $('.end-group').css('visibility', 'visible');
     }
 
     function setVoice() {
       console.log($('#vid').val())
     }
+
+    $('#ttstext').on('keyup', function () {
+      var words = this.value.match(/\S+/g).length;
+      if (words > 40) {
+        var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
+        $(this).val(trimmed);
+      }
+    })
   </script>
 
   <style lang="scss">
@@ -136,7 +116,7 @@
       width: 100%;
     }
 
-    .guess-group {
+    .tts-group {
       grid-column: 2/3;
       display: flex;
       flex-direction: column;
@@ -199,7 +179,7 @@
       box-shadow: 1px 3px 8px #5a5555;
     }
 
-    button#guess {
+    button#tts {
       width: 260px;
       background: #7bcc7b;
     }
@@ -229,11 +209,10 @@
       font-size: 18px;
     }
 
-    #my-guess {
+    #submit-tts {
       margin-top: 50px;
     }
   </style>
-
 </body>
 
 </html>

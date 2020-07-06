@@ -22,7 +22,22 @@
   <form>
     <div class="form-group">
       vID:<br>
-      <input type="text" id="vid"><br>
+      <!-- <input type="text" id="vid"><br> -->
+      <select name="vID" id="vid" onchange="setVoice()">
+        <option value="Jess">Participant A</option>
+        <option value="William">Participant B</option>
+        <option value="Adam">Voice A</option>
+        <option value="Giles">Voice B</option>
+        <option value="Hannah">Voice C</option>
+        <option value="Heather">Voice D</option>
+        <option value="Jack">Voice E</option>
+        <option value="Kirsty">Voice F</option>
+        <option value="Lauren">Voice G</option>
+        <option value="Megan">Voice H</option>
+        <option value="Nathan">Voice I</option>
+        <option value="Sarah">Voice J</option>
+        <option value="Stuart">Voice K</option>
+      </select><br>
       Picture:<br>
       <input type="text" id="pic"><br>
     </div>
@@ -42,6 +57,7 @@
 
   <div class="tts-group">
     <div class="all-buttons"></div>
+    <label id=wcount>Word Count: 0/40</label>
     <div id="submit-tts">
       <textarea id=ttstext rows="6" cols="50" placeholder="Enter your instructions"></textarea><br>
       <button id="tts">Submit</button>
@@ -81,8 +97,17 @@
       $('.end-group').css('visibility', 'visible');
     }
 
+    function wcount(wc) {
+      $('#wcount').text('Word Count: ' + wc + '/40');
+    }
+
+    function setVoice() {
+      console.log($('#vid').val())
+    }
+
     $('#ttstext').on('keyup', function () {
       var words = this.value.match(/\S+/g).length;
+      wcount(words);
       if (words > 40) {
         var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
         $(this).val(trimmed);
@@ -134,6 +159,12 @@
 
     textarea {
       height: 100px;
+    }
+
+    select {
+      background: white;
+      padding: 5px 8px;
+      width: 260px;
     }
 
     .all-buttons {

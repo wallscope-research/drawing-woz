@@ -21,6 +21,8 @@ app.use(express.static('public'));
 app.get('/', function (req, res) {
 	if (req.query.id === '1') {
 		res.sendFile(path.join(__dirname + '/public/client1.html'));
+	} else if (req.query.id === '3') {
+		res.sendFile(path.join(__dirname + '/public/client3.html'));
 	} else {
 		res.sendFile(path.join(__dirname + '/public/client2.html'));
 	}

@@ -30,10 +30,12 @@ function mouseDragged() {
 		y: mouseY,
 		color: clr
 	}
-	socket.emit('mouse', data);
-	console.log('sending:', mouseX + ',', mouseY + ',', clr)
-	noStroke()
-	displayDot(mouseX, mouseY, clr)
+	if(document.URL.includes('id=2')) {
+		socket.emit('mouse', data);
+		// console.log('sending:', mouseX + ',', mouseY + ',', clr)
+		noStroke()
+		displayDot(mouseX, mouseY, clr)
+	}
 }
 function newDrawing(data) {
 	data.color = upgradeColor(data.color)
