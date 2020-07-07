@@ -1,4 +1,4 @@
-# Collaborative Drawing Game
+# Drawing Conclusions: A Collaborative Drawing Game
 ### 👩‍🎨🎨👨‍🎨.
 
 This canvas has been built upon to create a more fleshed out drawing game for research.
