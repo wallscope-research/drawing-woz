@@ -22,27 +22,13 @@
   <form>
     <div class="form-group">
       vID:<br>
-      <!-- <input type="text" id="vid"><br> -->
-      <select name="vID" id="vid" onchange="setVoice()">
+      <select name="vID" id="vid">
         <option value="Jess">Participant A</option>
         <option value="William">Participant B</option>
-        <option value="Adam">Voice A</option>
-        <option value="Giles">Voice B</option>
-        <option value="Hannah">Voice C</option>
-        <option value="Heather">Voice D</option>
-        <option value="Jack">Voice E</option>
-        <option value="Kirsty">Voice F</option>
-        <option value="Lauren">Voice G</option>
-        <option value="Megan">Voice H</option>
-        <option value="Nathan">Voice I</option>
-        <option value="Sarah">Voice J</option>
-        <option value="Stuart">Voice K</option>
       </select><br>
-      Picture:<br>
-      <input type="text" id="pic"><br>
-    </div>
-    <div class="end-group">
-      Other Player's Guess:<br>
+      Correct Picture:<br>
+      <input type="text" id="pic" readonly><br>
+      Player's Guess:<br>
       <input type="text" id="guess" readonly>
     </div>
   </form>
@@ -52,7 +38,7 @@
   </audio>
 
   <div>
-    <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
+    <button id="finish" onclick="endGame()">End<br>Game</button>
   </div>
 
   <div class="tts-group">
@@ -95,18 +81,6 @@
       socket.emit('answer', $('#pic').val())
       $('.end-group').css('visibility', 'visible');
     }
-
-    function setVoice() {
-      console.log($('#vid').val())
-    }
-
-    $('#ttstext').on('keyup', function () {
-      var words = this.value.match(/\S+/g).length;
-      if (words > 40) {
-        var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
-        $(this).val(trimmed);
-      }
-    })
   </script>
 
   <style lang="scss">
@@ -137,11 +111,6 @@
 
     .form-group {
       margin-bottom: 10px;
-    }
-
-    .end-group {
-      margin-bottom: 10px;
-      visibility: hidden;
     }
 
     input,
@@ -201,7 +170,7 @@
       background: #ffdc76;
     }
 
-    button#switch {
+    button#finish {
       padding: 20px 10px;
       margin-left: auto;
       float: right;
