@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shared Canvas</title>
+  <title>Drawing Conclusions</title>
   <style>
     body {
       padding: 0;
@@ -21,6 +21,7 @@
 <body>
   <form>
     <div class="form-group">
+      <h1>Narrator</h1><br>
       vID:<br>
       <select name="vID" id="vid" onchange="setVoice()">
         <option value="Jess">Participant A</option>
@@ -78,6 +79,7 @@
         // Create record to store data
         var record = [{time: + new Date(), pic: $('#pic').val(), voice: $('#vid').val(), text: $('#ttstext').val()}]
         socket.emit('store', record)
+        $('#ttstext').val('');
       })
     })
 

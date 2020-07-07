@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shared Canvas</title>
+  <title>Drawing Conclusions</title>
   <style>
     body {
       padding: 0;
@@ -21,6 +21,7 @@
 <body>
   <form>
     <div class="form-group">
+      <h1>Artist</h1><br>
       vID:<br>
       <select name="vID" id="vid" onchange="setVoice()">
         <option value="Jess">Participant A</option>
@@ -116,6 +117,7 @@
         }
       }).done((res) => {
         socket.emit('audio', res)
+        $('#fin').val('');
       })
     })
 
@@ -180,7 +182,7 @@
     }
 
     textarea {
-      height: 100px;
+      height: 40px;
     }
 
     select {
