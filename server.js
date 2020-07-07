@@ -66,27 +66,43 @@ function newConnection(socket) {
 	socket.on('end', showGuess);
 	socket.on('answer', showAnswer);
 	socket.on('store', saveState);
+	socket.on('reportGuess', sendGuess);
+	socket.on('reportPic', sendPic);
+	socket.on('reportNarrV', sendNarrV);
+	socket.on('reportDrawV', sendDrawV);
 
 	function mouseMsg(data) {
 		socket.broadcast.emit('mouse', data)
-		console.log(data)
+		// console.log(data)
 	}
 
 	function audioMsg(oggUrl) {
 		socket.broadcast.emit('raudio', oggUrl)
-		console.log(oggUrl)
+		// console.log(oggUrl)
 	}
 
 	function showGuess(guess) {
 		socket.broadcast.emit('guess', guess)
-		console.log(guess)
+		// console.log(guess)
 	}
 
 	function showAnswer(answer) {
 		socket.broadcast.emit('finish', answer)
-		console.log(answer)
+		// console.log(answer)
 	}
 	function saveState(record) {
 		csvWriter.writeRecords(record).then(() => {console.log("Saved");});
+	}
+	function sendGuess(mguess) {
+		socket.broadcast.emit('sendGuess', mguess)
+	}
+	function sendPic(mpic) {
+		socket.broadcast.emit('sendPic', mpic)
+	}
+	function sendNarrV(mnarrv) {
+		socket.broadcast.emit('sendNarrV', mnarrv)
+	}
+	function sendDrawV(mdrawv) {
+		socket.broadcast.emit('sendDrawV', mdrawv)
 	}
 }

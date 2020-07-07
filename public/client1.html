@@ -93,7 +93,7 @@
 
     function endGame(guess) {
       $('#guess').val(guess);
-      socket.emit('answer', $('#pic').val())
+      // socket.emit('answer', $('#pic').val())
       $('.end-group').css('visibility', 'visible');
     }
 
@@ -102,7 +102,8 @@
     }
 
     function setVoice() {
-      console.log($('#vid').val())
+      socket.emit('reportNarrV', $('#vid').val())
+      // console.log($('#vid').val())
     }
 
     $('#ttstext').on('keyup', function () {
@@ -112,6 +113,9 @@
         var trimmed = $(this).val().split(/\s+/, 200).join(" ").slice(0, -1);
         $(this).val(trimmed);
       }
+    })
+    $('#pic').on('keyup', function () {
+      socket.emit('reportPic', $('#pic').val())
     })
   </script>
 

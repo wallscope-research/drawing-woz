@@ -108,7 +108,16 @@
     })
 
     $('#guess').click(function () {
-      socket.emit('end', $('#fin').val())
+      socket.emit('reportGuess', $('#fin').val())
+      $.get({
+        url: "/send-to-tts",
+        data: {
+          text: "My guess is "+$('#fin').val(),
+          vid: $('#vid').val()
+        }
+      }).done((res) => {
+        socket.emit('audio', res)
+      })
     })
 
     socket.on('raudio', playOgg)
@@ -125,7 +134,8 @@
     }
 
     function setVoice() {
-      console.log($('#vid').val())
+      socket.emit('reportDrawV', $('#vid').val())
+      // console.log($('#vid').val())
     }
   </script>
 

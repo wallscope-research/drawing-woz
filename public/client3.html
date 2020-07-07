@@ -20,16 +20,25 @@
 
 <body>
   <form>
-    <div class="form-group">
-      vID:<br>
-      <select name="vID" id="vid">
-        <option value="Jess">Participant A</option>
-        <option value="William">Participant B</option>
-      </select><br>
-      Correct Picture:<br>
-      <input type="text" id="pic" readonly><br>
-      Player's Guess:<br>
-      <input type="text" id="guess" readonly>
+    <div class="row">
+      <div class="form-group">
+        vID:<br>
+        <select name="vID" id="vid">
+          <option value="Jess">Participant A</option>
+          <option value="William">Participant B</option>
+        </select><br>
+        Correct Picture:<br>
+        <input type="text" id="pic" readonly><br>
+        Player's Guess:<br>
+        <input type="text" id="guess" readonly>
+      </div>
+      <div class="form-group">
+        <br><br>
+        Narrator Voice:<br>
+        <input type="text" id="narrv" value="Participant A" readonly><br>
+        Drawer Voice:<br>
+        <input type="text" id="drawv" value="Participant A" readonly><br>
+      </div>
     </div>
   </form>
 
@@ -68,7 +77,10 @@
     })
 
     socket.on('raudio', playOgg)
-    socket.on('guess', endGame)
+    socket.on('sendGuess', showGuess)
+    socket.on('sendPic', showPic)
+    socket.on('sendNarrV', showNarrV)
+    socket.on('sendDrawV', showDrawV)
 
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
@@ -77,9 +89,29 @@
     }
 
     function endGame(guess) {
-      $('#guess').val(guess);
-      socket.emit('answer', $('#pic').val())
-      $('.end-group').css('visibility', 'visible');
+      $.get({
+        url: "/send-to-tts",
+        data: {
+          text: "This round has ended",
+          vid: $('#vid').val()
+        }
+      }).done((res) => {
+        socket.emit('audio', res)
+      })
+      socket.emit('end', $('#pic').val())
+      socket.emit('answer', $('#guess').val())
+    }
+    function showGuess(mguess) {
+      $('#guess').val(mguess);
+    }
+    function showPic(mpic) {
+      $('#pic').val(mpic);
+    }
+    function showNarrV(mnarrv) {
+      $('#narrv').val(mnarrv);
+    }
+    function showDrawV(mdrawv) {
+      $('#drawv').val(mdrawv);
     }
   </script>
 
@@ -109,8 +141,13 @@
       background: lightgrey;
     }
 
+    .row {
+      display: flex;
+    }
+
     .form-group {
       margin-bottom: 10px;
+      flex: 50%;
     }
 
     input,
