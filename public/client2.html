@@ -117,6 +117,8 @@
         }
       }).done((res) => {
         socket.emit('audio', res)
+        var record = [{time: + new Date(), pic: 'NA Artist', voice: $('#vid').val(), text: $('#fin').val()}]
+        socket.emit('store', record)
         $('#fin').val('');
       })
     })

@@ -74,7 +74,7 @@
       }).done((res) => {
         socket.emit('audio', res)
         // Create record to store data
-        var record = [{time: + new Date(), pic: $('#pic').val(), voice: $('#vid').val(), text: $('#ttstext').val()}]
+        var record = [{time: + new Date(), pic: 'NA MOD', voice: $('#vid').val(), text: $('#ttstext').val()}]
         socket.emit('store', record)
         $('#ttstext').val('');
       })
@@ -104,6 +104,8 @@
       })
       socket.emit('end', $('#pic').val())
       socket.emit('answer', $('#guess').val())
+      var record = [{time: + new Date(), pic: 'NA MOD', voice: $('#vid').val(), text: 'Round Ended'}]
+      socket.emit('store', record)
     }
     function showGuess(mguess) {
       $('#guess').val(mguess);
