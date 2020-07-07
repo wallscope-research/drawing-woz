@@ -22,7 +22,6 @@
   <form>
     <div class="form-group">
       vID:<br>
-      <!-- <input type="text" id="vid"><br> -->
       <select name="vID" id="vid" onchange="setVoice()">
         <option value="Jess">Participant A</option>
         <option value="William">Participant B</option>
@@ -134,8 +133,7 @@
     }
 
     function setVoice() {
-      socket.emit('reportDrawV', $('#vid').val())
-      // console.log($('#vid').val())
+      socket.emit('reportDrawV', $('#vid option:selected').html())
     }
   </script>
 

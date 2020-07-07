@@ -22,7 +22,6 @@
   <form>
     <div class="form-group">
       vID:<br>
-      <!-- <input type="text" id="vid"><br> -->
       <select name="vID" id="vid" onchange="setVoice()">
         <option value="Jess">Participant A</option>
         <option value="William">Participant B</option>
@@ -93,7 +92,6 @@
 
     function endGame(guess) {
       $('#guess').val(guess);
-      // socket.emit('answer', $('#pic').val())
       $('.end-group').css('visibility', 'visible');
     }
 
@@ -102,8 +100,7 @@
     }
 
     function setVoice() {
-      socket.emit('reportNarrV', $('#vid').val())
-      // console.log($('#vid').val())
+      socket.emit('reportNarrV', $('#vid option:selected').html())
     }
 
     $('#ttstext').on('keyup', function () {
