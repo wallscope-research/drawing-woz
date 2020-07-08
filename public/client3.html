@@ -19,6 +19,7 @@
 </head>
 
 <body>
+  <!-- HTML to lay out mod voice selection and display players choices. -->
   <form>
     <div class="row">
       <div class="form-group">
@@ -45,14 +46,17 @@
     </div>
   </form>
 
+  <!-- HTML to create audio player to receive and play voices. -->
   <audio id="player" preload="auto">
     <source src="cereproc/test.ogg" />
   </audio>
 
+  <!-- HTML to add button that ends game. -->
   <div>
     <button id="finish" onclick="endGame()">End<br>Game</button>
   </div>
 
+  <!-- HTML to add text to speech input. -->
   <div class="tts-group">
     <div class="all-buttons"></div>
     <div id="submit-tts">
@@ -62,8 +66,10 @@
   </div>
 
   <script>
+    // Connect to server websocket.
     socket = io.connect(window.location.origin);
 
+    // This sends typed text to the TTS with the chosen voice.
     $('#tts').click(function () {
       $.get({
         url: "/send-to-tts",
@@ -72,26 +78,32 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
-        // Create record to store data
+        // To store the interactions, we create a record of time, NA, chosen voice, and typed text. NA Mod is sent for csv formatting and readability.
         var record = [{time: + new Date(), pic: 'NA MOD', voice: $('#vid').val(), text: $('#ttstext').val()}]
+        // This record is then emitted to be handled by server.js - which writes this data to a csv.
         socket.emit('store', record)
+        // The text sent to the TTS is cleared for user ease.
         $('#ttstext').val('');
       })
     })
 
+    // These lines handle incoming data from websocket broadcasts (from server.js).
     socket.on('raudio', playOgg)
     socket.on('sendGuess', showGuess)
     socket.on('sendPic', showPic)
     socket.on('sendNarrV', showNarrV)
     socket.on('sendDrawV', showDrawV)
 
+    // When the server broadcasts audio URLs, this function loads it into the player and plays it.
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
       $('#player').get(0).play();
       console.log(oggUrl)
     }
 
+    // When the End Game (#finish) button is clicked, this function alerts all players usinf TTS and reveals correct answer + recent guess to relevant players.
     function endGame(guess) {
       $.get({
         url: "/send-to-tts",
@@ -102,20 +114,28 @@
       }).done((res) => {
         socket.emit('audio', res)
       })
+      // The correct answer is emitted to be handled by server.js when game ends.
       socket.emit('end', $('#pic').val())
+      // The Artist's most recent guess is emitted to be handled by server.js when game ends.
       socket.emit('answer', $('#guess').val())
+      // Record created for data storage (time, NA, chosen voice, end of round indication). NA Mod is sent for csv formatting. This shows that the mod ended the round.
       var record = [{time: + new Date(), pic: 'NA MOD', voice: $('#vid').val(), text: 'Round Ended'}]
+      // Above record emitted to server.js for storage.
       socket.emit('store', record)
     }
+    // When the server broadcasts the artist's guesses, this function displays it to the moderator.
     function showGuess(mguess) {
       $('#guess').val(mguess);
     }
+    // When the server broadcasts the Narrator's chosen picture, this function displays it to the moderator.
     function showPic(mpic) {
       $('#pic').val(mpic);
     }
+    // When the server broadcasts the Narrator's chosen voice, this function displays it to the moderator.
     function showNarrV(mnarrv) {
       $('#narrv').val(mnarrv);
     }
+    // When the server broadcasts the Artist's chosen voice, this function displays it to the moderator.
     function showDrawV(mdrawv) {
       $('#drawv').val(mdrawv);
     }

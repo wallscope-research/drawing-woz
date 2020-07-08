@@ -1,12 +1,16 @@
 let clr
 let socket
 function setup() {
+	// Set canvas size.
 	let h = 600
 	let w = 600
 	socket = io.connect(window.location.origin)
+	// Call newDrawing function when the server emits drawing points.
 	socket.on('mouse', newDrawing);
 	createCanvas(h, w);
+	// Set canvas color to black.
 	background(0);
+	// Set drawing color to cyan.
 	clr = 180
 	noStroke()
 }
@@ -30,6 +34,7 @@ function mouseDragged() {
 		y: mouseY,
 		color: clr
 	}
+	// This line allows ONLY the artist to draw.
 	if(document.URL.includes('id=2')) {
 		socket.emit('mouse', data);
 		// console.log('sending:', mouseX + ',', mouseY + ',', clr)

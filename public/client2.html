@@ -19,6 +19,7 @@
 </head>
 
 <body>
+  <!-- HTML to lay out the Artist's voice choices and call "setVoice()" on voice change. -->
   <form>
     <div class="form-group">
       <h1>Artist</h1><br>
@@ -41,12 +42,17 @@
     </div>
   </form>
 
+  <!-- HTML to create audio player to receive and play voices. -->
   <audio id="player" preload="auto">
     <source src="cereproc/test.ogg" />
   </audio>
+
+  <!-- HTML to add the button to switch player role between rounds. -->
   <div>
     <button id="switch" onclick="window.location.href='/?id=1'">Switch<br>Player</button>
   </div>
+
+  <!-- HTML to add guessing functionality and hidden answer reveal. -->
   <div class="guess-group">
     <div class="all-buttons">
 
@@ -69,8 +75,10 @@
 
 
   <script>
+    // Connect to server websocket.
     socket = io.connect(window.location.origin);
 
+    // This sends "Ok, what is next" to the TTS with the chosen voice.
     $('#ok').click(function () {
       $.get({
         url: "/send-to-tts",
@@ -79,10 +87,12 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
       })
     })
 
+    // This sends "Could you please repeat that" to the TTS with the chosen voice.
     $('#repeat').click(function () {
       $.get({
         url: "/send-to-tts",
@@ -91,10 +101,12 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
       })
     })
 
+    // This sends "Can you clarify" to the TTS with the chosen voice.
     $('#clarify').click(function () {
       $.get({
         url: "/send-to-tts",
@@ -103,11 +115,14 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
       })
     })
 
+    // This sends the artist's guess to the TTS with the chosen voice and stores this action.
     $('#guess').click(function () {
+      // The guess is emitted to the server to be shown to the moderator.
       socket.emit('reportGuess', $('#fin').val())
       $.get({
         url: "/send-to-tts",
@@ -116,26 +131,34 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
+        // A record is created for storage, containing: time, NA, chosen voice, and the entered guess. 'NA Artist' is for csv layout and marks a guess in the data.
         var record = [{time: + new Date(), pic: 'NA Artist', voice: $('#vid').val(), text: $('#fin').val()}]
+        // This record is emitted to server.js for storage.
         socket.emit('store', record)
+        // The guess text box is then cleared for user ease.
         $('#fin').val('');
       })
     })
 
+    // These lines handle incoming data from websocket broadcasts (from server.js)
     socket.on('raudio', playOgg)
     socket.on('finish', showAnswer)
 
+    // When the server broadcasts audio URLs, this function loads it into the player and plays it.
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
       $('#player').get(0).play();
     }
 
+    // When the game is ended by the moderator, the correct answer is shown to the artist.
     function showAnswer(answer) {
       $('#answer').val(answer);
       $('.end-group').css('visibility', 'visible');
     }
 
+    // This function emits the chosen voice to server.js to be broadcast to the moderator.
     function setVoice() {
       socket.emit('reportDrawV', $('#vid option:selected').html())
     }

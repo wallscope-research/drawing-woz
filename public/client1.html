@@ -19,6 +19,8 @@
 </head>
 
 <body>
+  <!-- HTML to lay out the Narrator's voice choices and call "setVoice()" on voice change. -->
+  <!-- The text input to choose the target picture is here to alongside the hidden box to show the artist's final guess. -->
   <form>
     <div class="form-group">
       <h1>Narrator</h1><br>
@@ -47,14 +49,17 @@
     </div>
   </form>
 
+  <!-- HTML to create audio player to receive and play voices. -->
   <audio id="player" preload="auto">
     <source src="cereproc/test.ogg" />
   </audio>
 
+  <!-- HTML to add the button to switch player role between rounds. -->
   <div>
     <button id="switch" onclick="window.location.href='/?id=2'">Switch<br>Player</button>
   </div>
 
+  <!-- HTML to add the TTS functionality. -->
   <div class="tts-group">
     <div class="all-buttons"></div>
     <label id=wcount>Word Count: 0/40</label>
@@ -65,8 +70,10 @@
   </div>
 
   <script>
+    // Connect to server websocket.
     socket = io.connect(window.location.origin);
 
+    // This sends typed text to the TTS with the chosen voice.
     $('#tts').click(function () {
       $.get({
         url: "/send-to-tts",
@@ -75,36 +82,46 @@
           vid: $('#vid').val()
         }
       }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
         socket.emit('audio', res)
-        // Create record to store data
+        // To store the interactions, we create a record of time, target picture, chosen voice, and typed text.
         var record = [{time: + new Date(), pic: $('#pic').val(), voice: $('#vid').val(), text: $('#ttstext').val()}]
+        // This record is then emitted to be handled by server.js - which writes this data to a csv.
         socket.emit('store', record)
+        // The text sent to the TTS is cleared for user ease.
         $('#ttstext').val('');
       })
     })
 
+    // These lines handle incoming data from websocket broadcasts (from server.js).
     socket.on('raudio', playOgg)
     socket.on('guess', endGame)
 
+    // When the server broadcasts audio URLs, this function loads it into the player and plays it.
     function playOgg(oggUrl) {
       $('#player').attr("src", oggUrl);
       $('#player').get(0).play();
       console.log(oggUrl)
     }
 
+    // When the game is ended by the moderator, the artist's most recent guess is shown to the narrator.
     function endGame(guess) {
       $('#guess').val(guess);
       $('.end-group').css('visibility', 'visible');
     }
 
+    // This function displays the word count to the narrator as they typ instructions.
     function wcount(wc) {
       $('#wcount').text('Word Count: ' + wc + '/40');
     }
 
+    // This function emits the chosen voice to server.js to be broadcast to the moderator.
     function setVoice() {
       socket.emit('reportNarrV', $('#vid option:selected').html())
     }
 
+    // The Narrator can type instructions of up 40 words. This is to encourage multi-turn conversation.
+    // This function counts the number of words and blocks the typing of further words.
     $('#ttstext').on('keyup', function () {
       var words = this.value.match(/\S+/g).length;
       wcount(words);
@@ -113,6 +130,8 @@
         $(this).val(trimmed);
       }
     })
+
+    // This function emits the chosen target picture to server.js to be broadcast to the moderator.
     $('#pic').on('keyup', function () {
       socket.emit('reportPic', $('#pic').val())
     })
