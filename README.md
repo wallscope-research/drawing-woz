@@ -67,4 +67,4 @@ To start the game again just follow steps 2, 5, 6, 7, and 8.
 
 Each player chooses their voice at the beginning of each round. These voices are from [Cereproc's TTS](https://www.cereproc.com/en/home). The code can be changed to integrate with another TTS of course.
 
-Inspired by [Daniel Shiffman ("The Coding Train")](https://www.youtube.com/watch?v=bjULmG8fqc8 "The Coding Train")
+The canvas is inspired by [Daniel Shiffman ("The Coding Train")](https://www.youtube.com/watch?v=bjULmG8fqc8 "The Coding Train")
