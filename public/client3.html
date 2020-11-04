@@ -63,6 +63,14 @@
       <textarea id=ttstext rows="6" cols="50" placeholder="Enter your instructions"></textarea><br>
       <button id="tts">Submit</button>
     </div>
+    <div id="experiment">
+      <br><br>
+      Narrator URL:<br>
+      <textarea id=narr-url rows="6" cols="50" placeholder="Enter URL for narrator"></textarea><br>
+      Artist URL:<br>
+      <textarea id=art-url rows="6" cols="50" placeholder="Enter URL for Artist"></textarea><br>
+      <button id="urls">Send URLs</button>
+    </div>
   </div>
 
   <script>
@@ -86,6 +94,24 @@
         socket.emit('store', record)
         // The text sent to the TTS is cleared for user ease.
         $('#ttstext').val('');
+      })
+    })
+
+    // This sends typed text to the TTS with the chosen voice.
+    $('#urls').click(function () {
+      $.get({
+        url: "/send-to-tts",
+        data: {
+          text: "Please follow the link that has appeared on your screen",
+          vid: $('#vid').val()
+        }
+      }).done((res) => {
+        // Once the TTS responds (Cereproc returns URL of audio), it is emitted to be handled in server.js
+        socket.emit('audio', res)
+        // This sends the Narrator a link to continue the experiment.
+        socket.emit('reportNarrURL', $('#narr-url').val())
+        // This sends the Artist a link to continue the experiment.
+        socket.emit('reportArtURL', $('#art-url').val())
       })
     })
 
@@ -115,9 +141,9 @@
         socket.emit('audio', res)
       })
       // The correct answer is emitted to be handled by server.js when game ends.
-      socket.emit('end', $('#pic').val())
+      socket.emit('answer', $('#pic').val())
       // The Artist's most recent guess is emitted to be handled by server.js when game ends.
-      socket.emit('answer', $('#guess').val())
+      socket.emit('end', $('#guess').val())
       // Record created for data storage (time, NA, chosen voice, end of round indication). NA Mod is sent for csv formatting. This shows that the mod ended the round.
       var record = [{time: + new Date(), pic: 'NA MOD', voice: $('#vid').val(), text: 'Round Ended'}]
       // Above record emitted to server.js for storage.
@@ -218,6 +244,11 @@
     button#tts {
       width: 260px;
       background: #7bcc7b;
+    }
+
+    button#urls {
+      width: 260px;
+      background: #7bc4cc;
     }
 
     .all-buttons button {

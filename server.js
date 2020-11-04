@@ -75,6 +75,8 @@ function newConnection(socket) {
 	socket.on('reportPic', sendPic);
 	socket.on('reportNarrV', sendNarrV);
 	socket.on('reportDrawV', sendDrawV);
+	socket.on('reportNarrURL', sendNarrURL);
+	socket.on('reportArtURL', sendArtURL);
 
 	// As the artist draws, they emit coords. This function sends this to sketch.js to display.
 	function mouseMsg(data) {
@@ -123,5 +125,15 @@ function newConnection(socket) {
 	// When the Artist selects a voice, this choice is sent to the Moderator.
 	function sendDrawV(mdrawv) {
 		socket.broadcast.emit('sendDrawV', mdrawv)
+	}
+
+	// When the Moderator sends experiment URLs, this URL is sent to the Narrator.
+	function sendNarrURL(mnarrurl) {
+		socket.broadcast.emit('sendNarrURL', mnarrurl)
+	}
+
+	// When the Moderator sends experiment URLs, this URL is sent to the Artist.
+	function sendArtURL(marturl) {
+		socket.broadcast.emit('sendArtURL', marturl)
 	}
 }

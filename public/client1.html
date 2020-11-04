@@ -67,6 +67,9 @@
       <textarea id=ttstext rows="6" cols="50" placeholder="Enter your instructions"></textarea><br>
       <button id="tts">Submit</button>
     </div>
+    <div class="experiment">
+      <br><textarea id="follow-url" rows="3" cols="50" placeholder="Please await the URL for the next stage" readonly></textarea>
+    </div>
   </div>
 
   <script>
@@ -96,6 +99,7 @@
     // These lines handle incoming data from websocket broadcasts (from server.js).
     socket.on('raudio', playOgg)
     socket.on('guess', endGame)
+    socket.on('sendNarrURL', showURL)
 
     // When the server broadcasts audio URLs, this function loads it into the player and plays it.
     function playOgg(oggUrl) {
@@ -108,6 +112,12 @@
     function endGame(guess) {
       $('#guess').val(guess);
       $('.end-group').css('visibility', 'visible');
+    }
+
+    // When the experiment URLs are sent by the moderator, the URL is shown to the narrator.
+    function showURL(link) {
+      $('#follow-url').val(link);
+      $('.experiment').css('visibility', 'visible');
     }
 
     // This function displays the word count to the narrator as they typ instructions.
@@ -169,6 +179,12 @@
 
     .end-group {
       margin-bottom: 10px;
+      visibility: hidden;
+    }
+
+    .experiment {
+      margin-bottom: 10px;
+      margin-top: 10px;
       visibility: hidden;
     }
 

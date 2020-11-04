@@ -70,6 +70,9 @@
         </div>
     </div>
     </form>
+    <div class="experiment">
+      <br><textarea id="follow-url" rows="3" cols="50" placeholder="Please await the URL for the next stage" readonly></textarea>
+    </div>
   </div>
   </div>
 
@@ -145,6 +148,7 @@
     // These lines handle incoming data from websocket broadcasts (from server.js)
     socket.on('raudio', playOgg)
     socket.on('finish', showAnswer)
+    socket.on('sendArtURL', showURL)
 
     // When the server broadcasts audio URLs, this function loads it into the player and plays it.
     function playOgg(oggUrl) {
@@ -156,6 +160,13 @@
     function showAnswer(answer) {
       $('#answer').val(answer);
       $('.end-group').css('visibility', 'visible');
+      $('.experiment').css('visibility', 'visible');
+    }
+
+    // When the experiment URLs are sent by the moderator, the URL is shown to the artist.
+    function showURL(link) {
+      $('#follow-url').val(link);
+      $('.experiment').css('visibility', 'visible');
     }
 
     // This function emits the chosen voice to server.js to be broadcast to the moderator.
@@ -196,6 +207,12 @@
 
     .end-group {
       margin-bottom: 10px;
+      visibility: hidden;
+    }
+
+    .experiment {
+      margin-bottom: 10px;
+      margin-top: 10px;
       visibility: hidden;
     }
 
