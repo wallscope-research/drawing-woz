@@ -68,7 +68,7 @@
       <button id="tts">Submit</button>
     </div>
     <div class="experiment">
-      <br><textarea id="follow-url" rows="3" cols="50" placeholder="Please await the URL for the next stage" readonly></textarea>
+      <br><a href="" id="follow-url">Click here to contnue</a>
     </div>
   </div>
 
@@ -116,7 +116,7 @@
 
     // When the experiment URLs are sent by the moderator, the URL is shown to the narrator.
     function showURL(link) {
-      $('#follow-url').val(link);
+      $('#follow-url').prop('href', link);
       $('.experiment').css('visibility', 'visible');
     }
 
@@ -186,6 +186,10 @@
       margin-bottom: 10px;
       margin-top: 10px;
       visibility: hidden;
+    }
+
+    a {
+      font-size: 50px;
     }
 
     input,
